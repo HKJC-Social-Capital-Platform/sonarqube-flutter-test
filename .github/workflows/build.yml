@@ -13,6 +13,39 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          
+      - name: Get Flutter Version From FVM config
+        id: get_flutter_version
+        run: echo "::set-output name=version::$(cat .fvm/fvm_config.json | jq -r '.flutterSdkVersion')"
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2.12.0
+        with:
+          flutter-version: ${{ steps.get_flutter_version.outputs.version }}
+          channel: stable
+          cache: true
+          cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: 📦 Install Dependencies
+        run: |
+          flutter pub global activate very_good_cli
+          flutter pub global activate intl_utils 2.8.4
+          flutter pub global activate coverage
+
+      - name: 🦄 Generate Code
+        run: |
+          flutter pub global run intl_utils:generate
+          dart run build_runner build --delete-conflicting-outputs
+  
+      # - name: ✨ Check Formatting
+      #   run: dart format --set-exit-if-changed .
+
+      - name: 🕵️ Analyze
+        run: flutter analyze .
+
+      - name: 🧪 Run Tests
+        run: flutter test --coverage --coverage-path=coverage/lcov.info --test-randomize-ordering-seed=random --concurrency=10
+          
       - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
