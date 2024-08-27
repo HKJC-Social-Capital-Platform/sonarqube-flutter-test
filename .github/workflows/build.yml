@@ -9,9 +9,14 @@ jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
-    
     steps:
-      - uses: sonarsource/sonarqube-scan-action@v2.3.0 # Step for scanning your project
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+      - name: Checking out
+        uses: actions/checkout@v4
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      - name: Run sonarqube scan
+        uses: sonarsource/sonarqube-scan-action@v2.3.0 # Step for scanning your project
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
