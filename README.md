@@ -2,7 +2,7 @@
 
 本项目包含启动页，引导页，主题色，国际化，Bloc，RxDart。拥有较好的项目结构，比较规范的代码。 App拥有精致的UI界面，统一的交互，侧滑退出，列表和Web界面均提供快速滚动至顶部功能。  
 
-有关项目最新动态，可以关注App内第一条Hot Item信息。
+有关项目最新动态，可以关注App内第一条Hot Item信息。 
 
 ## [Moss App](https://github.com/Sky24n/Moss)
 A GitHub client app developed with Flutter, which supports Android iOS Web.  
