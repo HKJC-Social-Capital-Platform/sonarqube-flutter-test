@@ -14,14 +14,10 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
           
-      - name: Get Flutter Version From FVM config
-        id: get_flutter_version
-        run: echo "::set-output name=version::$(cat .fvm/fvm_config.json | jq -r '.flutterSdkVersion')"
-
       - name: 🐦 Setup Flutter
-        uses: subosito/flutter-action@v3.0.0
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ steps.get_flutter_version.outputs.version }}
+          flutter-version: 2.10.0
           channel: stable
           cache: true
           cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
